@@ -7,14 +7,18 @@ import com.example.netlib.domain.models.NetworkResult
 import com.example.netlib.domain.models.Slots
 import com.example.netlib.domain.models.UpdateAppointment
 
-
+/**
+ *
+ * CatalogRepository - определяет методы для записи
+ *
+ */
 interface AppointmentRepository {
 
     suspend fun getSlots(doctorId: String, date: String): NetworkResult< Slots>
 
     suspend fun getAppointments(
-        filter: String?,
-        sort: String?,
+        filter: String? = null,
+        sort: String? = null,
         page: Int? = 1,
         perPage: Int? = 20
     ): NetworkResult< AppointmentList>

@@ -5,7 +5,11 @@ import com.example.netlib.domain.models.UploadFiles
 import com.example.netlib.domain.models.User
 import com.example.netlib.domain.models.UserUpdate
 
-
+/**
+ *
+ * UserRepository - определяет методы редактирования и получения данных пользователя
+ *
+ */
 interface UserRepository {
 
     suspend fun getUser(

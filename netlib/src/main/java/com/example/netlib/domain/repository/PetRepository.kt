@@ -6,7 +6,11 @@ import com.example.netlib.domain.models.PetList
 import com.example.netlib.domain.models.PetUpdate
 import com.example.netlib.domain.models.UploadFiles
 
-
+/**
+ *
+ * UserRepository - определяет методы для изменение и просмотр данных питомцев
+ *
+ */
 interface PetRepository {
 
     suspend fun getPets(

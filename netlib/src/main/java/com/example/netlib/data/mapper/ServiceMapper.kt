@@ -14,8 +14,11 @@ import com.example.netlib.domain.models.DoctorExpand
 import com.example.netlib.domain.models.DoctorList
 import com.example.netlib.domain.models.Service
 import com.example.netlib.domain.models.ServiceList
-import kotlin.math.ln
 
+
+/**
+ * Преобразование ServiceDTO -> Service
+ */
 internal fun ServiceDTO.toDomain(): Service =
     Service(id = id,
         code = code,
@@ -24,6 +27,9 @@ internal fun ServiceDTO.toDomain(): Service =
         durationMin = durationMin,
         sort = sort)
 
+/**
+ * Преобразование ServiceListDTO -> ServiceList
+ */
 internal fun ServiceListDTO.toDomain(): ServiceList =
     ServiceList(
         page = page,
@@ -33,6 +39,9 @@ internal fun ServiceListDTO.toDomain(): ServiceList =
         items =  items.map { it.toDomain() }
     )
 
+/**
+ * Преобразование ClinicDTO -> Clinic
+ */
 internal fun ClinicDTO.toDomain(): Clinic = Clinic(
     id = id,
     name = name,
@@ -45,6 +54,9 @@ internal fun ClinicDTO.toDomain(): Clinic = Clinic(
 )
 
 
+/**
+ * Преобразование ClinicListDTO -> ClinicList
+ */
 internal fun ClinicListDTO.toDomain(): ClinicList =
     ClinicList(
         page = page,
@@ -54,12 +66,17 @@ internal fun ClinicListDTO.toDomain(): ClinicList =
         items =  items.map { it.toDomain() }
     )
 
-
+/**
+ * Преобразование DoctorExpandDTO -> DoctorExpand
+ */
 internal fun DoctorExpandDTO.toDomain(): DoctorExpand =
     DoctorExpand(
         clinic = clinic?.toDomain()
     )
 
+/**
+ * Преобразование DoctorDTO -> Doctor
+ */
 internal fun DoctorDTO.toDomain(): Doctor
 = Doctor(
     id = id,
@@ -74,6 +91,9 @@ internal fun DoctorDTO.toDomain(): Doctor
     expand =  expand?.toDomain()
 )
 
+/**
+ * Преобразование DoctorListDTO -> DoctorList
+ */
 internal fun DoctorListDTO.toDomain(): DoctorList =
     DoctorList(
         page = page,

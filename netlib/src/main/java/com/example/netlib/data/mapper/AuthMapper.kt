@@ -9,6 +9,9 @@ import com.example.netlib.domain.models.AuthResponse
 import com.example.netlib.domain.models.RegisterRequest
 import com.example.netlib.domain.models.User
 
+/**
+ * Преобразование RegisterRequest -> RegistrationDTO
+ */
 internal fun RegisterRequest.toRequest(): RegistrationDTO =
     RegistrationDTO(
         email =email,
@@ -18,6 +21,9 @@ internal fun RegisterRequest.toRequest(): RegistrationDTO =
         passwordConfirm = passwordConfirm
     )
 
+/**
+ * Преобразование UserDTO -> User
+ */
 internal fun UserDTO.toDomain(): User =
     User(
         id = id,
@@ -31,11 +37,15 @@ internal fun UserDTO.toDomain(): User =
     )
 
 
+/**
+ * Преобразование AuthResponseDTO -> AuthResponse
+ */
 internal fun AuthResponseDTO.toDomain(): AuthResponse =
     AuthResponse(
         token = token,
         record = record.toDomain()
     )
+
 
 internal fun AuthRequest.toRequest(): AuthRequestDTO =
     AuthRequestDTO(

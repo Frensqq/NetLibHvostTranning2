@@ -1,6 +1,5 @@
 package com.example.netlib.data.remote
 
-import android.R
 import com.example.netlib.data.remote.DTO.AppointmentDTO
 import com.example.netlib.data.remote.DTO.AppointmentListDTO
 import com.example.netlib.data.remote.DTO.AppointmentUpdateDTO
@@ -39,6 +38,11 @@ import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.encodeToJsonElement
 import kotlinx.serialization.json.jsonObject
 
+/**
+ * PBApi - класс с запросами к серверу
+ *
+ * @param client - httpClient
+ */
 internal class PBApi(
         private val client: HttpClient
 ) {

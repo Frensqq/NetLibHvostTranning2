@@ -11,6 +11,13 @@ import com.example.netlib.domain.models.UploadFiles
 import com.example.netlib.domain.network.Network
 import com.example.netlib.domain.repository.PetRepository
 
+/**
+ * PetRepositoryImpl - реализация PetRepository
+ *
+ * @param api - экземпляр api клиента
+ * @param network - проверка подключения к интернету
+ *
+ */
 internal class PetRepositoryImpl(
     private val api: PBApi,
     network: Network

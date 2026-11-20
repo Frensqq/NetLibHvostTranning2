@@ -6,7 +6,11 @@ import com.example.netlib.domain.models.NetworkResult
 import com.example.netlib.domain.models.RegisterRequest
 import com.example.netlib.domain.models.User
 
-
+/**
+ *
+ * CatalogRepository - определяет методы для аутентификации
+ *
+ */
 interface AuthRepository {
 
     suspend fun register(

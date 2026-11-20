@@ -13,12 +13,19 @@ import com.example.netlib.domain.models.Slot
 import com.example.netlib.domain.models.Slots
 import com.example.netlib.domain.models.UpdateAppointment
 
+
+/**
+ * Преобразование SlotDTO -> Slot
+ */
 internal fun SlotDTO.toDomain(): Slot = Slot(
     time = time,
     start = start,
     free = free
 )
 
+/**
+ * Преобразование SlotsDTO -> Slots
+ */
 internal fun SlotsDTO.toDomain(): Slots = Slots(
     doctor = doctor,
     date = date,
@@ -28,6 +35,9 @@ internal fun SlotsDTO.toDomain(): Slots = Slots(
 )
 
 
+/**
+ * Преобразование AppointmentDTO -> Appointment
+ */
 internal fun AppointmentDTO.toDomain(): Appointment = Appointment(
     id = id, number = number,
     user = user,
@@ -43,6 +53,9 @@ internal fun AppointmentDTO.toDomain(): Appointment = Appointment(
     updated = updated
 )
 
+/**
+ * Преобразование AppointmentListDTO -> AppointmentList
+ */
 internal fun AppointmentListDTO.toDomain(): AppointmentList
 = AppointmentList(
     page = page,
@@ -52,6 +65,9 @@ internal fun AppointmentListDTO.toDomain(): AppointmentList
     items = items.map { it.toDomain() }
 )
 
+/**
+ * Преобразование UpdateAppointment -> AppointmentUpdateDTO
+ */
 internal fun UpdateAppointment.toRequest(): AppointmentUpdateDTO = AppointmentUpdateDTO(
     pet =pet,
     doctor =  doctor,
@@ -60,6 +76,9 @@ internal fun UpdateAppointment.toRequest(): AppointmentUpdateDTO = AppointmentUp
     comment =  comment
 )
 
+/**
+ * Преобразование Cancel -> CancelDTO
+ */
 internal fun Cancel.toRequest(): CancelDTO =
     CancelDTO(
         reason = reason

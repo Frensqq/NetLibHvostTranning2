@@ -3,7 +3,6 @@ package com.example.netlib.data.repository
 import com.example.netlib.data.mapper.toDomain
 import com.example.netlib.data.mapper.toRequest
 import com.example.netlib.data.remote.PBApi
-import com.example.netlib.data.storage.TokenStorageImpl
 import com.example.netlib.domain.models.AuthRequest
 import com.example.netlib.domain.models.AuthResponse
 import com.example.netlib.domain.models.NetworkResult
@@ -11,10 +10,19 @@ import com.example.netlib.domain.models.RegisterRequest
 import com.example.netlib.domain.models.User
 import com.example.netlib.domain.network.Network
 import com.example.netlib.domain.repository.AuthRepository
+import com.example.netlib.domain.storage.TokenStorage
 
+/**
+ * AuthRepositoryImpl - реализация AuthRepository
+ *
+ * @param api - экземпляр api клиента
+ * @param tokenStorage - хранилище токена
+ * @param network - проверка подключения к интернету
+ *
+ */
 internal class AuthRepositoryImpl(
     private val api: PBApi,
-    private val tokenStorageImpl: TokenStorageImpl,
+    private val tokenStorage: TokenStorage,
     network: Network
 ): PBBaseRepository(network), AuthRepository
 {
@@ -28,7 +36,7 @@ internal class AuthRepositoryImpl(
         return saveApiCall {
             val result  = api.auth(data.toRequest()).toDomain()
 
-            tokenStorageImpl.saveToken(result.token)
+            tokenStorage.saveToken(result.token)
 
             result
         }
@@ -38,7 +46,7 @@ internal class AuthRepositoryImpl(
         return saveApiCall {
             val result  = api.tokenRefresh().toDomain()
 
-            tokenStorageImpl.saveToken(result.token)
+            tokenStorage.saveToken(result.token)
 
             result
         }

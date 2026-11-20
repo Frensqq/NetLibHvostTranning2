@@ -15,6 +15,13 @@ import com.example.netlib.domain.network.Network
 import com.example.netlib.domain.repository.AuthRepository
 import com.example.netlib.domain.repository.UserRepository
 
+/**
+ * UserRepositoryImpl - реализация UserRepository
+ *
+ * @param api - экземпляр api клиента
+ * @param network - проверка подключения к интернету
+ *
+ */
 internal class UserRepositoryImpl(
     private val api: PBApi,
     network: Network

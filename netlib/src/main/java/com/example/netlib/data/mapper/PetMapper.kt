@@ -7,6 +7,9 @@ import com.example.netlib.domain.models.Pet
 import com.example.netlib.domain.models.PetList
 import com.example.netlib.domain.models.PetUpdate
 
+/**
+ * Преобразование PetDTO -> Pet
+ */
 internal fun PetDTO.toDomain(): Pet =
     Pet(
         id = id,
@@ -21,6 +24,9 @@ internal fun PetDTO.toDomain(): Pet =
         updated = updated
     )
 
+/**
+ * Преобразование PetListDTO -> PetList
+ */
 internal fun PetListDTO.toDomain(): PetList =
     PetList(
         page = page,
@@ -30,6 +36,9 @@ internal fun PetListDTO.toDomain(): PetList =
         items = items.map { it.toDomain() }
     )
 
+/**
+ * Преобразование PetUpdate -> PetUpdateDTO
+ */
 internal fun PetUpdate.toRequest(): PetUpdateDTO =
     PetUpdateDTO(
         name = name,

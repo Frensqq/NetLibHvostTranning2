@@ -6,7 +6,7 @@ import com.example.netlib.domain.models.UploadFiles
 
 
 /**
- * Перевод из FileUpload в FileUploadDTO
+ * Преобразование UploadFiles -> FileUploadDTO
  */
 internal fun UploadFiles.toRequest() =
     FileUploadDTO(

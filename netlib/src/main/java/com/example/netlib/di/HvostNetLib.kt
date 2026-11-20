@@ -7,6 +7,7 @@ import com.example.netlib.data.remote.PBApiService
 import com.example.netlib.data.repository.AppointmentRepositoryImpl
 import com.example.netlib.data.repository.AuthRepositoryImpl
 import com.example.netlib.data.repository.CatalogRepositoryImpl
+import com.example.netlib.data.repository.PetRepositoryImpl
 import com.example.netlib.data.repository.UserRepositoryImpl
 import com.example.netlib.data.storage.TokenStorageImpl
 import com.example.netlib.domain.repository.AppointmentRepository
@@ -15,6 +16,16 @@ import com.example.netlib.domain.repository.CatalogRepository
 import com.example.netlib.domain.repository.PetRepository
 import com.example.netlib.domain.repository.UserRepository
 import com.example.netlib.domain.storage.TokenStorage
+
+
+/**
+ * HvostNetLib - публичный класс предоставляет доступ к библиотеки
+ *
+ * @param context - Android context
+ * @param baseUrl - путь к серверу по умолчанию
+ * @param tokenStorage  - хранилище токена
+ *
+ */
 class HvostNetLib(
     context: Context,
     baseUrl: String,

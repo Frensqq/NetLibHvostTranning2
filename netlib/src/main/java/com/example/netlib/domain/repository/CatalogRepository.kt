@@ -5,7 +5,11 @@ import com.example.netlib.domain.models.DoctorList
 import com.example.netlib.domain.models.NetworkResult
 import com.example.netlib.domain.models.ServiceList
 
-
+/**
+ *
+ * CatalogRepository - определяет методы для изменение и просмотр каталогов
+ *
+ */
 interface CatalogRepository {
 
     suspend fun getService(
