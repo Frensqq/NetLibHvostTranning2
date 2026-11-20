@@ -1,6 +1,6 @@
 package com.example.netlib.data.repository
 
-import android.R
+
 import com.example.netlib.data.mapper.toDomain
 import com.example.netlib.data.remote.DTO.ApiErrorDTO
 import com.example.netlib.domain.models.ApiError
@@ -12,12 +12,15 @@ import io.ktor.serialization.ContentConvertException
 import io.ktor.serialization.JsonConvertException
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.decodeFromJsonElement
 import okio.IOException
 import java.util.concurrent.TimeoutException
-import kotlin.coroutines.cancellation.CancellationException
-import kotlin.jvm.Throws
 
+/**
+ * PBBaseRepository - базовый репозиторий для получения и обработки ответа сервера
+ *
+ * @param network - проверка наличия подключения интернета
+ *
+ */
 abstract class PBBaseRepository(
     protected val network: Network
 ) {

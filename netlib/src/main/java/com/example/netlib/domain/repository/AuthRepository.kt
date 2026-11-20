@@ -10,11 +10,11 @@ import com.example.netlib.domain.models.User
 interface AuthRepository {
 
     suspend fun register(
-        data: NetworkResult< RegisterRequest>
+        data:  RegisterRequest
     ): NetworkResult< User>
 
     suspend fun auth(
-        data: NetworkResult< AuthRequest>
+        data:  AuthRequest
     ): NetworkResult< AuthResponse>
 
     suspend fun tokenRefresh() : NetworkResult< AuthResponse>
