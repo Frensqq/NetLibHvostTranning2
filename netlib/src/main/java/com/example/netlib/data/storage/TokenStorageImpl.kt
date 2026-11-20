@@ -9,7 +9,7 @@ import com.example.netlib.domain.storage.TokenStorage
  * @param context -Android context
  *
  */
-class TokenStorageImpl(private val context: Context): TokenStorage {
+internal class TokenStorageImpl(private val context: Context): TokenStorage {
 
     protected val preferences = context.getSharedPreferences("net_lib_hvost", Context.MODE_PRIVATE)
 

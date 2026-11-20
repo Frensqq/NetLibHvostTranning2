@@ -21,8 +21,7 @@ import kotlinx.serialization.json.Json
  * @param getToken - токен авторизации
  *
  */
-class PBApiService(
-
+internal class PBApiService(
     private val defaultUrl : String,
     private val getToken: () -> String?
 ) {
