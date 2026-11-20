@@ -275,5 +275,5 @@ internal class PBApi(
     ): AppointmentDTO =
         post("hvost/appointments/${id}/cancel",
             data)
-    
+
 }
