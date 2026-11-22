@@ -28,7 +28,8 @@ internal class AuthRepositoryImpl(
 {
     override suspend fun register(data: RegisterRequest): NetworkResult<User> {
         return safeApiCall {
-            api.register(data.toRequest()).toDomain()
+            val user = api.register(data.toRequest()).toDomain()
+            user.copy(email = user.email.ifEmpty { data.email })
         }
     }
 
