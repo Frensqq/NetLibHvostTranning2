@@ -27,13 +27,13 @@ internal class AuthRepositoryImpl(
 ): PBBaseRepository(network), AuthRepository
 {
     override suspend fun register(data: RegisterRequest): NetworkResult<User> {
-        return saveApiCall {
+        return safeApiCall {
             api.register(data.toRequest()).toDomain()
         }
     }
 
     override suspend fun auth(data: AuthRequest): NetworkResult<AuthResponse> {
-        return saveApiCall {
+        return safeApiCall {
             val result  = api.auth(data.toRequest()).toDomain()
 
             tokenStorage.saveToken(result.token)
@@ -43,7 +43,7 @@ internal class AuthRepositoryImpl(
     }
 
     override suspend fun tokenRefresh(): NetworkResult<AuthResponse> {
-        return saveApiCall {
+        return safeApiCall {
             val result  = api.tokenRefresh().toDomain()
 
             tokenStorage.saveToken(result.token)

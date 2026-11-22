@@ -28,7 +28,7 @@ internal class PetRepositoryImpl(
         perPage: Int?,
         sort: String?
     ): NetworkResult<PetList> {
-        return saveApiCall {
+        return safeApiCall {
             api.getPets(
                 page, perPage, sort
             ).toDomain()
@@ -39,7 +39,7 @@ internal class PetRepositoryImpl(
         data: PetUpdate,
         photo: UploadFiles
     ): NetworkResult<Pet> {
-        return saveApiCall {
+        return safeApiCall {
             api.postPet(
                 data.toRequest(),
                 photo.toRequest()
@@ -52,7 +52,7 @@ internal class PetRepositoryImpl(
         data: PetUpdate,
         photo: UploadFiles
     ): NetworkResult<Pet> {
-        return saveApiCall {
+        return safeApiCall {
             api.patchPet(id,
                 data.toRequest(),
                 photo.toRequest()
@@ -61,7 +61,7 @@ internal class PetRepositoryImpl(
     }
 
     override suspend fun deletePet(id: String): NetworkResult<Unit> {
-        return saveApiCall {
+        return safeApiCall {
             api.deletePet(id)
         }
     }

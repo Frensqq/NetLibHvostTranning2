@@ -26,7 +26,7 @@ internal class CatalogRepositoryImpl(
         perPage: Int?,
         sort: String?
     ): NetworkResult<ServiceList> {
-        return saveApiCall {
+        return safeApiCall {
             api.getService(
                 page,
                 perPage,
@@ -40,7 +40,7 @@ internal class CatalogRepositoryImpl(
         perPage: Int?,
         sort: String?
     ): NetworkResult<ClinicList> {
-        return saveApiCall {
+        return safeApiCall {
             api.getClinics(
                 page,
                 perPage,
@@ -55,7 +55,7 @@ internal class CatalogRepositoryImpl(
         sort: String?,
         filter: String?
     ): NetworkResult<DoctorList> {
-        return saveApiCall {
+        return safeApiCall {
             api.getDoctors(
                 page,
                 perPage,

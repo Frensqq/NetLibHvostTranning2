@@ -28,7 +28,7 @@ internal class UserRepositoryImpl(
 ): PBBaseRepository(network), UserRepository
 {
     override suspend fun getUser(userId: String): NetworkResult<User> {
-        return saveApiCall { api.getUser(userId).toDomain() }
+        return safeApiCall { api.getUser(userId).toDomain() }
     }
 
     override suspend fun patchUser(
@@ -36,7 +36,7 @@ internal class UserRepositoryImpl(
         data: UserUpdate,
         avatar: UploadFiles
     ): NetworkResult<User> {
-        return saveApiCall { api.patchUser(
+        return safeApiCall { api.patchUser(
             userId,
             data.toRequest(),
             avatar.toRequest()

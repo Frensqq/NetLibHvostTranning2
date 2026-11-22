@@ -29,7 +29,7 @@ internal class AppointmentRepositoryImpl(
         doctorId: String,
         date: String
     ): NetworkResult<Slots> {
-        return saveApiCall {
+        return safeApiCall {
             api.getSlots(
                 doctorId, date
             ).toDomain()
@@ -42,7 +42,7 @@ internal class AppointmentRepositoryImpl(
         page: Int? ,
         perPage: Int? ,
     ): NetworkResult<AppointmentList> {
-        return saveApiCall {
+        return safeApiCall {
             api.getAppointments(
                 filter,
                 sort,
@@ -53,7 +53,7 @@ internal class AppointmentRepositoryImpl(
     }
 
     override suspend fun postAppointments(data: UpdateAppointment): NetworkResult<Appointment> {
-        return saveApiCall {
+        return safeApiCall {
             api.postAppointments(
                 data.toRequest()
             ).toDomain()
@@ -64,7 +64,7 @@ internal class AppointmentRepositoryImpl(
         id: String,
         data: Cancel
     ): NetworkResult<Appointment> {
-        return saveApiCall {
+        return safeApiCall {
             api.canselAppointment(
                 id,
                 data.toRequest()

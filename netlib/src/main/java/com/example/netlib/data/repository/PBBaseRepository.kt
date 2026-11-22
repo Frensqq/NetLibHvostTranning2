@@ -1,107 +1,38 @@
 package com.example.netlib.data.repository
 
-
-import com.example.netlib.data.mapper.toDomain
-import com.example.netlib.data.remote.DTO.ApiErrorDTO
+import com.example.netlib.data.remote.ServerErrorParser
 import com.example.netlib.domain.models.ApiError
 import com.example.netlib.domain.models.NetworkResult
 import com.example.netlib.domain.network.Network
+import io.ktor.client.plugins.HttpRequestTimeoutException
 import io.ktor.client.plugins.ResponseException
-import io.ktor.client.statement.bodyAsText
 import io.ktor.serialization.ContentConvertException
-import io.ktor.serialization.JsonConvertException
+import kotlinx.coroutines.CancellationException
 import kotlinx.serialization.SerializationException
-import kotlinx.serialization.json.Json
-import okio.IOException
-import java.util.concurrent.TimeoutException
+import java.io.IOException
+import java.net.SocketTimeoutException
 
-/**
- * PBBaseRepository - базовый репозиторий для получения и обработки ответа сервера
- *
- * @param network - проверка наличия подключения интернета
- *
- */
-abstract class PBBaseRepository(
-    protected val network: Network
-) {
-
-   protected suspend fun <T> saveApiCall(
-        apiCall: suspend () -> T
-    ): NetworkResult<T> {
-
-       if (!network.isOnline()){
-           return NetworkResult.NoInternet
-       }
-
-       return try {
-           NetworkResult.Success(apiCall())
-       } catch (e: TimeoutException){
-           return NetworkResult.Timeout
-       } catch (e: IOException){
-           return NetworkResult.NoInternet
-       } catch (e: ResponseException){
-
-           val status = e.response.status.value
-
-           val text = try {
-               e.response.bodyAsText()
-           } catch (e: Exception) {
-               return NetworkResult.Error(
-                   ApiError(
-                       status = status,
-                       message = "Не удалось прочитать тело ответа ${e.message}"
-                   )
-               )
-           }
-
-           val error = try {
-               Json { ignoreUnknownKeys = true }
-                   .decodeFromString<ApiErrorDTO>(text)
-                   .toDomain()
-
-           }  catch (e: SerializationException) {
-               return NetworkResult.ErrorSerialization(
-                   message = "Ошибка сериализации ответа сервера ${e.message}",
-                   status = status
-               )
-
-           } catch (e: Exception) {
-               return NetworkResult.ErrorSerialization(
-                   message = "Некорректный формат ошибки: ${e.message}",
-                   status = status
-               )
-           }
-
-           NetworkResult.Error(error)
-       }catch (e: ContentConvertException){
-           NetworkResult.Error(
-               ApiError(
-                   message = e.cause?.message?: e.message ?: "Ошибка конвертации ответа сервера"
-               )
-           )
-       } catch (e: JsonConvertException){
-           NetworkResult.ErrorSerialization(
-                   message = e.cause?.message?: e.message ?: "Ошибка конвертации json ответа сервера"
-           )
-       } catch (e: SerializationException) {
-            NetworkResult.ErrorSerialization(
-               message = e.message?: "Ошибка сериализации ответа сервера",
-           )
-
-       } catch (e: Exception) {
-            NetworkResult.Error(
-                ApiError(
-                -1,
-               message = "Unknown error: ${e.message}"
-                )
-           )
-       }
-
-
-
-
+internal abstract class PBBaseRepository(private val network: Network) {
+    protected suspend fun <T> safeApiCall(call: suspend () -> T): NetworkResult<T> {
+        if (!network.isOnline()) return NetworkResult.NoInternet
+        return try {
+            NetworkResult.Success(call())
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: HttpRequestTimeoutException) {
+            NetworkResult.Timeout
+        } catch (e: SocketTimeoutException) {
+            NetworkResult.Timeout
+        } catch (e: ResponseException) {
+            ServerErrorParser.parse(e.response)
+        } catch (e: IOException) {
+            NetworkResult.NoInternet
+        } catch (e: ContentConvertException) {
+            NetworkResult.ErrorSerialization(message = e.message)
+        } catch (e: SerializationException) {
+            NetworkResult.ErrorSerialization(message = e.message)
+        } catch (e: Exception) {
+            NetworkResult.Error(ApiError(message = e.message ?: "Неизвестная ошибка"))
+        }
     }
-
-
-
 }
