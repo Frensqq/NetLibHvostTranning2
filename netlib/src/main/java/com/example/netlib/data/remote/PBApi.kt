@@ -83,10 +83,10 @@ internal class PBApi(
     }
 
     private fun files(
-        vararg values: Pair<String, FileUploadDTO>
+        vararg values: Pair<String, FileUploadDTO?>
     ) = values
-        .filter { it.second != null }
-        .associate { it.first to listOf(it.second!!) }
+        .mapNotNull { (field, file) -> file?.let { field to listOf(it) } }
+        .toMap()
 
     private inline fun<reified D> fields( data: D): Map<String , String> =
         json.encodeToJsonElement(data)
@@ -168,7 +168,7 @@ internal class PBApi(
     suspend fun patchUser(
         userId: String,
         data: PatchUserDTO,
-        avatar: FileUploadDTO
+        avatar: FileUploadDTO?
     ): UserDTO = patchMultipart(
         "collections/users/records/${userId}",
         data,
@@ -221,7 +221,7 @@ internal class PBApi(
 
     suspend fun postPet(
         data: PetUpdateDTO,
-        photo: FileUploadDTO
+        photo: FileUploadDTO?
     ): PetDTO = postMultipart(
         "collections/pets/records",
         data,
@@ -230,7 +230,7 @@ internal class PBApi(
     suspend fun patchPet(
         id: String,
         data: PetUpdateDTO,
-        photo: FileUploadDTO
+        photo: FileUploadDTO?
     ): PetDTO = patchMultipart(
         "collections/pets/records/$id",
         data,

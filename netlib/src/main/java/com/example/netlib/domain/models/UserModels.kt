@@ -32,6 +32,6 @@ val record: User,
 )
 
 data class UserUpdate(
-    val name: String,
-    val phone: String,
+    val name: String? = null,
+    val phone: String? = null,
 )

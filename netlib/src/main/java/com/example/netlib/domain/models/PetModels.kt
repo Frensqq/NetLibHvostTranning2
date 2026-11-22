@@ -22,10 +22,10 @@ data class PetList(
 )
 
 data class PetUpdate(
-    val name: String,
-    val species: String,
-    val breed: String,
-    val birthDate: String,
-    val weightKg: Double,
+    val name: String? = null,
+    val species: String? = null,
+    val breed: String? = null,
+    val birthDate: String? = null,
+    val weightKg: Double? = null,
 )
 

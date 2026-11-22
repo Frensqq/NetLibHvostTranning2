@@ -19,7 +19,7 @@ interface UserRepository {
     suspend fun patchUser(
         userId: String,
         data: UserUpdate,
-        avatar: UploadFiles
+        avatar: UploadFiles? = null
     ): NetworkResult< User>
 
 }

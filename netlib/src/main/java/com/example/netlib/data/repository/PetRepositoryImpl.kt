@@ -37,12 +37,12 @@ internal class PetRepositoryImpl(
 
     override suspend fun postPet(
         data: PetUpdate,
-        photo: UploadFiles
+        photo: UploadFiles?
     ): NetworkResult<Pet> {
         return safeApiCall {
             api.postPet(
                 data.toRequest(),
-                photo.toRequest()
+                photo?.toRequest()
             ).toDomain()
         }
     }
@@ -50,12 +50,12 @@ internal class PetRepositoryImpl(
     override suspend fun patchPet(
         id: String,
         data: PetUpdate,
-        photo: UploadFiles
+        photo: UploadFiles?
     ): NetworkResult<Pet> {
         return safeApiCall {
             api.patchPet(id,
                 data.toRequest(),
-                photo.toRequest()
+                photo?.toRequest()
             ).toDomain()
         }
     }

@@ -21,12 +21,12 @@ interface PetRepository {
 
     suspend fun postPet(
         data: PetUpdate,
-        photo: UploadFiles
+        photo: UploadFiles? = null
     ): NetworkResult< Pet>
     suspend fun patchPet(
         id: String,
         data: PetUpdate,
-        photo: UploadFiles
+        photo: UploadFiles? = null
     ): NetworkResult< Pet>
 
     suspend fun deletePet(

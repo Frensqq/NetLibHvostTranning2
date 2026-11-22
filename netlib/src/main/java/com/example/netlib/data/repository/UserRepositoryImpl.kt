@@ -34,12 +34,12 @@ internal class UserRepositoryImpl(
     override suspend fun patchUser(
         userId: String,
         data: UserUpdate,
-        avatar: UploadFiles
+        avatar: UploadFiles?
     ): NetworkResult<User> {
         return safeApiCall { api.patchUser(
             userId,
             data.toRequest(),
-            avatar.toRequest()
+            avatar?.toRequest()
         ).toDomain() }
     }
 
