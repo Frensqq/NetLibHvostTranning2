@@ -70,9 +70,9 @@ internal class PBApi(
     }.body()
 
 
-    private suspend inline fun <reified  D> post(
+    private suspend inline fun <reified D, reified Body> post(
         path: String,
-        data: Any
+        data: Body
     ) : D = client.post(path) {
         setBody(data)
         contentType(ContentType.Application.Json)
@@ -146,31 +146,31 @@ internal class PBApi(
     suspend fun register(
         data: RegistrationDTO
     ): UserDTO = post(
-        "/api/collections/users/records",
+        "collections/users/records",
         data
     )
     suspend fun auth(
         data: AuthRequestDTO
     ): AuthResponseDTO = post(
-        "/api/collections/users/auth-with-password",
+        "collections/users/auth-with-password",
         data
     )
 
     suspend fun tokenRefresh() : AuthResponseDTO =
-        post("/api/collections/users/auth-refresh",
+        post("collections/users/auth-refresh",
             buildJsonObject {  })
 
     suspend fun getUser(
         userId: String
     ): UserDTO = get(
-        "/api/collections/users/records/${userId}"
+        "collections/users/records/${userId}"
     )
     suspend fun patchUser(
         userId: String,
         data: PatchUserDTO,
         avatar: FileUploadDTO
     ): UserDTO = patchMultipart(
-        "/api/collections/users/records/${userId}",
+        "collections/users/records/${userId}",
         data,
         files("avatar" to avatar)
     )
@@ -184,7 +184,7 @@ internal class PBApi(
         perPage: Int? = null,
         sort: String? = null,
     ): ServiceListDTO = get(
-        "/api/collections/services/records",
+        "collections/services/records",
         page = page, perPage = perPage, sort = sort
     )
 
@@ -193,7 +193,7 @@ internal class PBApi(
         perPage: Int? = null,
         sort: String? = null,
     ): ClinicListDTO = get(
-        "/api/collections/clinics/records",
+        "collections/clinics/records",
         page = page, perPage = perPage, sort = sort
     )
 
@@ -203,7 +203,7 @@ internal class PBApi(
         sort: String? = "-clinic",
         filter: String? = null,
     ): DoctorListDTO = get(
-        "/api/collections/doctors/records",
+        "collections/doctors/records",
         page = page, perPage = perPage, sort = sort,
         expand = "clinic", filter = filter
     )
@@ -215,7 +215,7 @@ internal class PBApi(
         perPage: Int? = null,
         sort: String? = null,
     ): PetListDTO = get(
-        "/api/collections/pets/records",
+        "collections/pets/records",
         page = page, perPage = perPage, sort = sort
     )
 
@@ -223,7 +223,7 @@ internal class PBApi(
         data: PetUpdateDTO,
         photo: FileUploadDTO
     ): PetDTO = postMultipart(
-        "/api/collections/pets/records",
+        "collections/pets/records",
         data,
         files("photo" to photo)
     )
@@ -232,14 +232,14 @@ internal class PBApi(
         data: PetUpdateDTO,
         photo: FileUploadDTO
     ): PetDTO = patchMultipart(
-        "/api/collections/pets/records/$id",
+        "collections/pets/records/$id",
         data,
         files("photo" to photo)
     )
 
     suspend fun deletePet(
         id: String
-    ): Unit = delete("/api/collections/pets/records/${id}")
+    ): Unit = delete("collections/pets/records/${id}")
 
 
     //Appointment

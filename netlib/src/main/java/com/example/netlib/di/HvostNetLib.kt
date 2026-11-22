@@ -30,7 +30,7 @@ class HvostNetLib(
     context: Context,
     baseUrl: String,
     private val tokenStorage: TokenStorage = TokenStorageImpl(context)
-){
+) : AutoCloseable {
 
     private val clientFactory = PBApiService(
         defaultUrl = baseUrl,
@@ -62,4 +62,5 @@ class HvostNetLib(
 
     val appointmentRepository: AppointmentRepository =
         AppointmentRepositoryImpl(api,networkMonitor)
+    override fun close() = httpClient.close()
 }
