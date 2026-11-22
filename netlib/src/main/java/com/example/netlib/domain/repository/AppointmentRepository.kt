@@ -1,6 +1,7 @@
 package com.example.netlib.domain.repository
 
 import com.example.netlib.domain.models.Appointment
+import com.example.netlib.domain.models.AppointmentPeriod
 import com.example.netlib.domain.models.AppointmentList
 import com.example.netlib.domain.models.Cancel
 import com.example.netlib.domain.models.NetworkResult
@@ -33,4 +34,10 @@ interface AppointmentRepository {
         id: String,
         data: Cancel, ): NetworkResult< Appointment>
 
+    suspend fun appointmentsFor(
+        period: AppointmentPeriod, page: Int = 1, perPage: Int = 20
+    ): NetworkResult<AppointmentList>
+
+    suspend fun cancelAppointment(id: String, data: Cancel): NetworkResult<Appointment> =
+        canselAppointment(id, data)
 }

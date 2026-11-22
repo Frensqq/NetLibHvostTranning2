@@ -1,7 +1,5 @@
 package com.example.netlib.domain.models
 
-import io.ktor.client.plugins.HttpRequestRetry
-
 data class ApiErrorFields(
     val code: String?,
     val message: String?

@@ -1,7 +1,5 @@
 package com.example.netlib.domain.models
 
-import com.example.netlib.domain.storage.TokenStorage
-
 data class RegisterRequest(
     val email: String,
 val password: String,

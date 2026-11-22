@@ -31,4 +31,7 @@ interface CatalogRepository {
         filter: String? = null,
     ): NetworkResult< DoctorList>
 
+    suspend fun doctorsForService(
+        serviceId: String, page: Int = 1, perPage: Int = 20
+    ): NetworkResult<DoctorList>
 }

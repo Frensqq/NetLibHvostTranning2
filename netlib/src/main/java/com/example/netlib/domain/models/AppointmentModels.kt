@@ -1,6 +1,6 @@
 package com.example.netlib.domain.models
 
-import io.ktor.websocket.CloseReason
+enum class AppointmentPeriod { UPCOMING, PAST }
 
 data class Slot(
     val time: String,

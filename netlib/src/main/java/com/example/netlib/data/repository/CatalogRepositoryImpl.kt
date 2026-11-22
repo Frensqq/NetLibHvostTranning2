@@ -65,5 +65,10 @@ internal class CatalogRepositoryImpl(
         }
     }
 
-
+    override suspend fun doctorsForService(
+        serviceId: String, page: Int, perPage: Int
+    ): NetworkResult<DoctorList> {
+        require(serviceId.matches(Regex("[a-zA-Z0-9]+"))) { "Invalid service ID" }
+        return getDoctors(page, perPage, "name", "services~'$serviceId'")
+    }
 }

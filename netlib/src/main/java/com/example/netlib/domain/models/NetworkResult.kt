@@ -1,7 +1,5 @@
 package com.example.netlib.domain.models
 
-import java.sql.Date
-
 /**
  * NetworkResult — результат выполнения сетевого запроса
  */

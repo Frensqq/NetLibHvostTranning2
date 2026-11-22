@@ -4,6 +4,7 @@ import com.example.netlib.data.mapper.toDomain
 import com.example.netlib.data.mapper.toRequest
 import com.example.netlib.data.remote.PBApi
 import com.example.netlib.domain.models.Appointment
+import com.example.netlib.domain.models.AppointmentPeriod
 import com.example.netlib.domain.models.AppointmentList
 import com.example.netlib.domain.models.Cancel
 import com.example.netlib.domain.models.NetworkResult
@@ -70,5 +71,14 @@ internal class AppointmentRepositoryImpl(
                 data.toRequest()
             ).toDomain()
         }
+    }
+
+    override suspend fun appointmentsFor(
+        period: AppointmentPeriod, page: Int, perPage: Int
+    ): NetworkResult<AppointmentList> = when (period) {
+        AppointmentPeriod.UPCOMING ->
+            getAppointments("(status='pending' || status='confirmed')", "start", page, perPage)
+        AppointmentPeriod.PAST ->
+            getAppointments("(status='done' || status='cancelled')", "-start", page, perPage)
     }
 }
