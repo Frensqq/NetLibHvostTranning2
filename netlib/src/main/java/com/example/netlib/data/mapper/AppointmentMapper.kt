@@ -7,6 +7,7 @@ import com.example.netlib.data.remote.DTO.CancelDTO
 import com.example.netlib.data.remote.DTO.SlotDTO
 import com.example.netlib.data.remote.DTO.SlotsDTO
 import com.example.netlib.domain.models.Appointment
+import com.example.netlib.domain.models.AppointmentExpand
 import com.example.netlib.domain.models.AppointmentList
 import com.example.netlib.domain.models.Cancel
 import com.example.netlib.domain.models.Slot
@@ -50,7 +51,15 @@ internal fun AppointmentDTO.toDomain(): Appointment = Appointment(
     comment = comment,
     cancelReason = cancelReason,
     created = created,
-    updated = updated
+    updated = updated,
+    expand = expand?.let {
+        AppointmentExpand(
+            pet = it.pet?.toDomain(),
+            doctor = it.doctor?.toDomain(),
+            service = it.service?.toDomain(),
+            clinic = it.clinic?.toDomain()
+        )
+    }
 )
 
 /**
