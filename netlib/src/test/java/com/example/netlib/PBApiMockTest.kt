@@ -1,6 +1,7 @@
 package com.example.netlib
 
 import com.example.netlib.data.remote.PBApi
+import com.example.netlib.data.remote.PBApiService
 import com.example.netlib.data.repository.AppointmentRepositoryImpl
 import com.example.netlib.data.repository.AuthRepositoryImpl
 import com.example.netlib.domain.models.AuthRequest
@@ -8,60 +9,31 @@ import com.example.netlib.domain.models.NetworkResult
 import com.example.netlib.domain.models.Slots
 import com.example.netlib.domain.models.UpdateAppointment
 import com.example.netlib.domain.network.Network
-import com.example.netlib.domain.repository.AppointmentRepository
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.mock.MockEngine
 import io.ktor.client.engine.mock.respond
-import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
-import io.ktor.client.plugins.defaultRequest
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.headersOf
-import io.ktor.serialization.kotlinx.json.json
 import kotlinx.coroutines.test.runTest
-import kotlinx.serialization.json.Json
 import org.junit.Test
 import kotlin.collections.containsKey
 import kotlin.test.assertEquals
 import kotlin.test.assertIs
 import kotlin.test.assertTrue
-import kotlin.text.get
 
 class PBApiMockTest {
 
-    val json = Json{
-        ignoreUnknownKeys = true
-    }
+
 
     private fun clientCreate(
         response: String,
         status: HttpStatusCode = HttpStatusCode.OK
 
     ): HttpClient =
-        HttpClient(MockEngine{
-            respond(
-                content =  response,
-                status = status,
-                headers = headersOf(
-                    HttpHeaders.ContentType,
-                    "application/Json"
-                )
-            )
-        }){
-
-            expectSuccess = true
-
-            install(ContentNegotiation){
-                json(json)
-            }
-
-
-            defaultRequest {
-                url("http://10.0.2.2/api/")
-
-            }
-        }
-
+        PBApiService("http://10.0.2.2/api/", { null }).create(MockEngine {
+            respond(response, status, headersOf(HttpHeaders.ContentType, "application/json"))
+        })
 
     private val onlineNetwork = object : Network {
         override fun isOnline(): Boolean {
@@ -257,4 +229,37 @@ class PBApiMockTest {
     }
 
 
+    @Test
+    fun sessionTokenIsReadForEveryRequest() = runTest {
+        val storage = FakeTokenImpl()
+        val tokens = mutableListOf<String?>()
+        val urls = mutableListOf<String>()
+        val user = """{"id":"u","email":"e","name":"","phone":"","avatar":"","verified":false,"created":"","updated":""}"""
+        val client = PBApiService("http://training.local:8090/api", storage::getToken)
+            .create(MockEngine { request ->
+                urls += request.url.toString()
+                tokens += request.headers[HttpHeaders.Authorization]
+                respond("""{"token":"token${tokens.size}","record":$user}""",
+                    headers = headersOf(HttpHeaders.ContentType, "application/json"))
+            })
+        client.use {
+            val auth = AuthRepositoryImpl(PBApi(it), storage, onlineNetwork)
+            assertIs<NetworkResult.Success<*>>(auth.auth(AuthRequest("e", "p")))
+            repeat(2) { assertIs<NetworkResult.Success<*>>(auth.tokenRefresh()) }
+        }
+        assertEquals(listOf(null, "token1", "token2"), tokens)
+        assertEquals("token3", storage.getToken())
+        assertEquals(listOf("auth-with-password", "auth-refresh", "auth-refresh")
+            .map { "http://training.local:8090/api/collections/users/$it" }, urls)
+    }
+
+    @Test
+    fun socketTimeoutHasItsOwnResult() = runTest {
+        PBApiService("http://localhost/api/", { null }).create(MockEngine {
+            throw java.net.SocketTimeoutException("read timed out")
+        }).use {
+            val repository = AppointmentRepositoryImpl(PBApi(it), onlineNetwork)
+            assertIs<NetworkResult.Timeout>(repository.getSlots("doctor", "2026-11-11"))
+        }
+    }
 }
