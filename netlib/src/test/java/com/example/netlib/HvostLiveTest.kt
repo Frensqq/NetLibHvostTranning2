@@ -42,6 +42,10 @@ class HvostLiveTest {
                 assertEquals(id, auth.auth(AuthRequest(email, password)).value().record.id)
                 assertEquals(id, auth.tokenRefresh().value().record.id)
                 assertEquals(id, users.getUser(id).value().id)
+                val png = UploadFiles(java.util.Base64.getDecoder().decode(
+                    "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+aAugAAAAASUVORK5CYII="
+                ), "sample.png", "image/png")
+                assertTrue(users.patchUser(id, UserUpdate(), png).value().avatar.isNotBlank())
                 assertEquals("Новое имя", users.patchUser(id, UserUpdate(name = "Новое имя")).value().name)
                 val service = catalog.getService(null, null, "sort").value().items.first()
                 val clinics = catalog.getClinics(null, null, "sort").value().items
@@ -50,6 +54,7 @@ class HvostLiveTest {
                 val pet = pets.postPet(PetUpdate(name = "Барсик", species = "cat")).value()
                 try {
                     assertEquals(pet.id, pets.getPets(null, null, null).value().items.single().id)
+                    assertTrue(pets.patchPet(pet.id, PetUpdate(), png).value().photo.isNotBlank())
                     assertEquals("Мурзик", pets.patchPet(pet.id, PetUpdate(name = "Мурзик")).value().name)
                     val today = LocalDate.now(ZoneId.of("Europe/Moscow"))
                     val date = (1L..14L).map(today::plusDays).first { it.dayOfWeek.value in doctor.workDays }
